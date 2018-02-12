@@ -14,6 +14,7 @@ console.log("Copyright (c) 2018 MING-CHIEN LEE. All rights reserved.\n");
 const client = new Discord.Client();
 client.on('ready', () => {
   console.log(`Logged in as ${client.user.tag}!`);
+  client.user.setGame('@kc.loli | !help');
 });
 client.on('message', message => {
   // Our bot needs to know if it will execute a command
