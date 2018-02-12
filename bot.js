@@ -71,7 +71,6 @@ function getPixivImgLink(url, recipientId, callback) {
       callback(illustIdList);
     } else {
       console.error("getPixivImgLink " + err);
-      sendErrorMessage(recipientId);
       callback("error");
     }
   });
