@@ -8,7 +8,13 @@ const express = require('express');
 const Discord = require('discord.js');
 const cheerio = require('cheerio');
 const request = require('request');
+var glitchButton = "<html><head><title>Koguchi Chino Discord Bot</title></head><body><h1>Koguchi Chino Discord Bot</h1><script src=\"https://button.glitch.me/button.js\" data-style=\"glitch\"></script><div class=\"glitchButton\" style=\"position:fixed;top:20px;right:20px;\"></div></body></html>";
 let app = express();
+app.get('/', function (req, res) {
+  res.writeHead(200, { 'Content-Type': 'text/html' });
+  res.write(glitchButton);
+  res.end();
+});
 var server = app.listen(process.env.PORT || 3000, function () {
   console.log("Koguchi Chino Discord Bot v1.0.0");
   console.log("Copyright (c) 2018 MING-CHIEN LEE. All rights reserved.\n");
