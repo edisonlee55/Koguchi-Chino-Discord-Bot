@@ -34,13 +34,10 @@ client.on('message', message => {
             fields: [{
               name: "Images",
               value: "`!chino`,`!loli`"
-            },{
+            }, {
               value: "**Support?**\nContact edisonlee55: https://www.edisonlee55.com/#contact"
             }
-          ],
-            footer: {
-              text: "Pixiv illust_id: " + illustId
-            }
+            ]
           }
         });
         break;
