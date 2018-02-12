@@ -90,11 +90,8 @@ function sendChinoPhoto(message) {
             var resImg = new Discord.Attachment(imgurl);
             message.channel.send({
               embed: {
-                url: "https://www.pixiv.net/member_illust.php?mode=medium&illust_id=" + illustId,
                 file: resImg,
-                footer: {
-                  text: "pixiv illust_id: " + illustId
-                }
+                description: "pixiv illust_id: " + illustId
               }
             });
           } else {
@@ -122,11 +119,8 @@ function sendLoliPhoto(message) {
             var resImg = new Discord.Attachment(imgurl);
             message.channel.send({
               embed: {
-                url: "https://www.pixiv.net/member_illust.php?mode=medium&illust_id=" + illustId,
                 file: resImg,
-                footer: {
-                  text: "pixiv illust_id: " + illustId
-                }
+                description: "pixiv illust_id: " + illustId
               }
             });
           } else {
