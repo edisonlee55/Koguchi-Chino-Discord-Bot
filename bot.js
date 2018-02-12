@@ -25,11 +25,24 @@ client.on('message', message => {
 
     args = args.splice(1);
     switch (cmd) {
-      case '來張智乃照片':
-        sendChinoPhoto(message);
-        break;
-      case '來張蘿莉照片':
-        sendLoliPhoto(message);
+      case 'help':
+        message.channel.send({
+          embed: {
+            color: 3447003,
+            title: "Koguchi Chino Discord Bot - Help",
+            description: "Below you can see all the commands.",
+            fields: [{
+              name: "Images",
+              value: "`!chino`,`!loli`"
+            },{
+              value: "**Support?**\nContact edisonlee55: https://www.edisonlee55.com/#contact"
+            }
+          ],
+            footer: {
+              text: "Pixiv illust_id: " + illustId
+            }
+          }
+        });
         break;
       case 'chino':
         sendChinoPhoto(message);
@@ -90,7 +103,6 @@ function sendChinoPhoto(message) {
             var resImg = new Discord.Attachment(imgurl);
             message.channel.send({
               embed: {
-                url: "https://www.pixiv.net/member_illust.php?mode=medium&illust_id=" + illustId,
                 file: resImg,
                 footer: {
                   text: "Pixiv illust_id: " + illustId
