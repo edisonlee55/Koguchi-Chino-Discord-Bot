@@ -30,13 +30,19 @@ client.on('message', message => {
           embed: {
             color: 3447003,
             title: "Koguchi Chino Discord Bot - Help",
-            description: "Below you can see all the commands.",
-            fields: [{
-              name: "Images",
-              value: "`!chino`,`!loli`"
-            }, {
-              value: "**Support?**\nContact edisonlee55: https://www.edisonlee55.com/#contact"
-            }
+            description: "Below you can see all the commands:",
+            fields: [
+              {
+                name: "Koguchi Chino",
+                value: "`!help`"
+              },
+              {
+                name: "Images",
+                value: "`!chino`**,**`!loli`"
+              }, {
+                name: "Need Support?",
+                value: "Contact edisonlee55: https://www.edisonlee55.com/#contact"
+              }
             ]
           }
         });
