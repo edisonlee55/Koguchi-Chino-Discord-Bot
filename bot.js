@@ -9,6 +9,11 @@ const Discord = require('discord.js');
 const cheerio = require('cheerio');
 const request = require('request');
 let app = express();
+var server = app.listen(process.env.PORT || 3000, function () {
+  console.log("Koguchi Chino Discord Bot v1.0.0");
+  console.log("Copyright (c) 2018 MING-CHIEN LEE. All rights reserved.\n");
+  console.log("Listening express on port %s", server.address().port);
+});
 // Initialize Discord Bot
 const client = new Discord.Client();
 client.on('ready', () => {
@@ -153,8 +158,3 @@ function sendLoliPhoto(message) {
     }
   });
 }
-var server = app.listen(process.env.PORT || 3000, function () {
-  console.log("Koguchi Chino Discord Bot v1.0.0");
-  console.log("Copyright (c) 2018 MING-CHIEN LEE. All rights reserved.\n");
-  console.log("Listening express on port %s", server.address().port);
-});
