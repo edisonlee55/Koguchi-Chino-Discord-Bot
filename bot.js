@@ -4,12 +4,11 @@
  * This source code is licensed under the MIT license found in the
  * LICENSE file in the root directory of this source tree.
  */
+const express = require('express');
 const Discord = require('discord.js');
 const cheerio = require('cheerio');
 const request = require('request');
-console.log("Koguchi Chino Discord Bot v1.0.0");
-console.log("Copyright (c) 2018 MING-CHIEN LEE. All rights reserved.\n");
-
+let app = express();
 // Initialize Discord Bot
 const client = new Discord.Client();
 client.on('ready', () => {
@@ -41,7 +40,7 @@ client.on('message', message => {
                 value: "`!chino`**,**`!loli`"
               }, {
                 name: "Need Support?",
-                value: "Contact edisonlee55: https://www.edisonlee55.com/#contact"
+                value: "Contact <@213656926414831616>:\nhttps://www.edisonlee55.com/#contact"
               }
             ]
           }
@@ -62,7 +61,7 @@ client.on('guildMemberAdd', member => {
   // Do nothing if the channel wasn't found on this server
   if (!channel) return;
   // Send the message, mentioning the member
-  channel.send(`Welcome to edisonlee55 Discord Server, ${member}!\nPlease read #rules carefully and having fun!`);
+  channel.send(`Welcome to edisonlee55 Discord Server, ${member}!\nPlease read <#412453219264888832> carefully and having fun!`);
 });
 client.login(process.env.TOKEN);
 
@@ -154,3 +153,8 @@ function sendLoliPhoto(message) {
     }
   });
 }
+var server = app.listen(process.env.PORT || 3000, function () {
+  console.log("Koguchi Chino Discord Bot v1.0.0");
+  console.log("Copyright (c) 2018 MING-CHIEN LEE. All rights reserved.\n");
+  console.log("Listening on port %s", server.address().port);
+});
