@@ -14,7 +14,7 @@ console.log("Copyright (c) 2018 MING-CHIEN LEE. All rights reserved.\n");
 const client = new Discord.Client();
 client.on('ready', () => {
   console.log(`Logged in as ${client.user.tag}!`);
-  client.user.setGame('@kc.loli | !help');
+  client.user.setActivity('@kc.loli | !help');
 });
 client.on('message', message => {
   // Our bot needs to know if it will execute a command
@@ -87,8 +87,15 @@ function sendChinoPhoto(message) {
       function check() {
         request(imgurl, function (err, res, body) {
           if (!err && res.statusCode == 200) {
-            var resimg = new Discord.Attachment(imgurl);
-            message.reply(resimg);
+            message.channel.send({
+              embed: {
+                url: "https://www.pixiv.net/member_illust.php?mode=medium&illust_id=" + illustId,
+                image: imgurl,
+                footer: {
+                  text: "pixiv illust_id: " + illustId
+                }
+              }
+            });
           } else {
             imgurl = "https://pixiv.cat/" + illustIdList[Math.round(Math.random() * illustIdList.length - 1)] + ".png";
             console.log("Chino Pixiv Img Link: " + imgurl);
@@ -111,8 +118,15 @@ function sendLoliPhoto(message) {
       function check() {
         request(imgurl, function (err, res, body) {
           if (!err && res.statusCode == 200) {
-            var resimg = new Discord.Attachment(imgurl);
-            message.reply(resimg);
+            message.channel.send({
+              embed: {
+                url: "https://www.pixiv.net/member_illust.php?mode=medium&illust_id=" + illustId,
+                image: imgurl,
+                footer: {
+                  text: "pixiv illust_id: " + illustId
+                }
+              }
+            });
           } else {
             imgurl = "https://pixiv.cat/" + illustIdList[Math.round(Math.random() * illustIdList.length - 1)] + ".png";
             console.log("Loli Pixiv Img Link: " + imgurl);
