@@ -72,7 +72,7 @@ client.on('guildMemberAdd', member => {
   // Do nothing if the channel wasn't found on this server
   if (!channel) return;
   // Send the message, mentioning the member
-  channel.send(`Welcome to edisonlee55 Discord Server, ${member}!\nPlease read <#412453219264888832> carefully!\n歡迎 ${member} 加入 edisonlee55 的 Discord 伺服器!\n請詳讀 <#412453219264888832>!`);
+  channel.send(`Welcome to edisonlee55 Discord Server, ${member}!\nPlease read <#412453219264888832> carefully and having fun!`);
 });
 client.login(process.env.TOKEN);
 
