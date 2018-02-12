@@ -4,52 +4,52 @@
  * This source code is licensed under the MIT license found in the
  * LICENSE file in the root directory of this source tree.
  */
-var Discord = require('discord.io');
-var logger = require('winston');
+const Discord = require('discord.js');
 const cheerio = require('cheerio');
 const request = require('request');
-// Configure logger settings
-logger.remove(logger.transports.Console);
-logger.add(logger.transports.Console, {
-  colorize: true
-});
-logger.level = 'debug';
-
 console.log("Koguchi Chino Discord Bot v1.0.0");
 console.log("Copyright (c) 2018 MING-CHIEN LEE. All rights reserved.\n");
 
 // Initialize Discord Bot
-var bot = new Discord.Client({
-  token: process.env.TOKEN,
-  autorun: true
+const client = new Discord.Client();
+client.on('ready', () => {
+  console.log(`Logged in as ${client.user.tag}!`);
 });
-bot.on('ready', function (evt) {
-  logger.info('Connected');
-  logger.info('Logged in as: ');
-  logger.info(bot.username + ' - (' + bot.id + ')');
-});
-bot.on('message', function (user, userID, channelID, message, evt) {
+client.on('message', message => {
   // Our bot needs to know if it will execute a command
   // It will listen for messages that will start with `!`
-  if (message.substring(0, 1) == '!') {
-    var args = message.substring(1).split(' ');
+  if (message.content.substring(0, 1) == '!') {
+    var args = message.content.substring(1).split(' ');
     var cmd = args[0];
 
     args = args.splice(1);
     switch (cmd) {
-      // !ping
-      case 'ping':
-        bot.sendMessage({
-          to: channelID,
-          message: 'Pong!'
-        });
+      case '來張智乃照片':
+        sendChinoPhoto(message);
         break;
-      // Just add any case commands if you want to..
+      case '來張蘿莉照片':
+        sendLoliPhoto(message);
+        break;
+      case 'chino':
+        sendChinoPhoto(message);
+        break;
+      case 'loli':
+        sendLoliPhoto(message);
+        break;
     }
   }
 });
+client.on('guildMemberAdd', member => {
+  // Send the message to a designated channel on a server:
+  const channel = member.guild.channels.find('welcome');
+  // Do nothing if the channel wasn't found on this server
+  if (!channel) return;
+  // Send the message, mentioning the member
+  channel.send(`Welcome to edisonlee55 Discord Server, ${member}!\nPlease read #rules carefully and having fun!`);
+});
+client.login(process.env.TOKEN);
 
-function getPixivImgLink(url, recipientId, callback) {
+function getPixivImgLink(url, message, callback) {
   console.log("Pixiv Img List Link: " + url);
   var illustIdList = [];
   var option = {
@@ -76,16 +76,18 @@ function getPixivImgLink(url, recipientId, callback) {
   });
 }
 
-function sendChinoPhoto(recipientId) {
-  getPixivImgLink('https://www.pixiv.net/search.php?word=%E6%99%BA%E4%B9%83&order=date_d&p=' + Math.round(1 + Math.random() * 150), recipientId, function (illustIdList) {
+function sendChinoPhoto(message) {
+  getPixivImgLink('https://www.pixiv.net/search.php?word=%E6%99%BA%E4%B9%83&order=date_d&p=' + Math.round(1 + Math.random() * 150), message, function (illustIdList) {
     if (illustIdList !== "error") {
       console.log(illustIdList);
-      var imgurl = "https://pixiv.cat/" + illustIdList[Math.round(Math.random() * illustIdList.length - 1)] + ".png";
+      var illustId = illustIdList[Math.round(Math.random() * illustIdList.length - 1)];
+      var imgurl = "https://pixiv.cat/" + illustId + ".png";
       console.log("Chino Pixiv Img Link: " + imgurl);
       function check() {
         request(imgurl, function (err, res, body) {
           if (!err && res.statusCode == 200) {
-
+            var resimg = new Discord.Attachment(imgurl);
+            message.reply(resimg);
           } else {
             imgurl = "https://pixiv.cat/" + illustIdList[Math.round(Math.random() * illustIdList.length - 1)] + ".png";
             console.log("Chino Pixiv Img Link: " + imgurl);
@@ -98,16 +100,18 @@ function sendChinoPhoto(recipientId) {
   });
 }
 
-function sendLoliPhoto(recipientId) {
-  getPixivImgLink('https://www.pixiv.net/search.php?word=%E3%83%AD%E3%83%AA%20OR%20(%20loli%20)&order=date_d&p=' + Math.round(1 + Math.random() * 1000), recipientId, function (illustIdList) {
+function sendLoliPhoto(message) {
+  getPixivImgLink('https://www.pixiv.net/search.php?word=%E3%83%AD%E3%83%AA%20OR%20(%20loli%20)&order=date_d&p=' + Math.round(1 + Math.random() * 1000), message, function (illustIdList) {
     if (illustIdList !== "error") {
       console.log(illustIdList);
-      var imgurl = "https://pixiv.cat/" + illustIdList[Math.round(Math.random() * illustIdList.length - 1)] + ".png";
+      var illustId = illustIdList[Math.round(Math.random() * illustIdList.length - 1)];
+      var imgurl = "https://pixiv.cat/" + illustId + ".png";
       console.log("Loli Pixiv Img Link: " + imgurl);
       function check() {
         request(imgurl, function (err, res, body) {
           if (!err && res.statusCode == 200) {
-
+            var resimg = new Discord.Attachment(imgurl);
+            message.reply(resimg);
           } else {
             imgurl = "https://pixiv.cat/" + illustIdList[Math.round(Math.random() * illustIdList.length - 1)] + ".png";
             console.log("Loli Pixiv Img Link: " + imgurl);
