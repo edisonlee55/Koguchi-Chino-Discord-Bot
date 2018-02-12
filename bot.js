@@ -87,10 +87,11 @@ function sendChinoPhoto(message) {
       function check() {
         request(imgurl, function (err, res, body) {
           if (!err && res.statusCode == 200) {
+            var resImg = new Discord.Attachment(imgurl);
             message.channel.send({
               embed: {
                 url: "https://www.pixiv.net/member_illust.php?mode=medium&illust_id=" + illustId,
-                image: imgurl,
+                file: resImg,
                 footer: {
                   text: "pixiv illust_id: " + illustId
                 }
@@ -118,10 +119,11 @@ function sendLoliPhoto(message) {
       function check() {
         request(imgurl, function (err, res, body) {
           if (!err && res.statusCode == 200) {
+            var resImg = new Discord.Attachment(imgurl);
             message.channel.send({
               embed: {
                 url: "https://www.pixiv.net/member_illust.php?mode=medium&illust_id=" + illustId,
-                image: imgurl,
+                file: resImg,
                 footer: {
                   text: "pixiv illust_id: " + illustId
                 }
