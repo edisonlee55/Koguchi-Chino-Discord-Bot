@@ -123,7 +123,8 @@ function sendChinoPhoto(message) {
               }
             });
           } else {
-            imgurl = "https://pixiv.cat/" + illustIdList[Math.round(Math.random() * illustIdList.length - 1)] + ".png";
+            illustId = illustIdList[Math.round(Math.random() * illustIdList.length - 1)];
+            imgurl = "https://pixiv.cat/" + illustId + ".png";
             console.log("Chino Pixiv Img Link: " + imgurl);
             check();
           }
@@ -154,7 +155,8 @@ function sendLoliPhoto(message) {
               }
             });
           } else {
-            imgurl = "https://pixiv.cat/" + illustIdList[Math.round(Math.random() * illustIdList.length - 1)] + ".png";
+            illustId = illustIdList[Math.round(Math.random() * illustIdList.length - 1)];
+            imgurl = "https://pixiv.cat/" + illustId + ".png";
             console.log("Loli Pixiv Img Link: " + imgurl);
             check();
           }
