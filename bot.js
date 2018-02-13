@@ -8,6 +8,7 @@ const express = require('express');
 const Discord = require('discord.js');
 const cheerio = require('cheerio');
 const request = require('request');
+var Jimp = require("jimp");
 var glitchButton = "<html><head><title>Koguchi Chino Discord Bot</title></head><body><h1>Koguchi Chino Discord Bot</h1><script src=\"https://button.glitch.me/button.js\" data-style=\"glitch\"></script><div class=\"glitchButton\" style=\"position:fixed;top:20px;right:20px;\"></div></body></html>";
 let app = express();
 app.get('/', function (req, res) {
@@ -72,6 +73,17 @@ client.on('guildMemberAdd', member => {
   // Do nothing if the channel wasn't found on this server
   if (!channel) return;
   // Send the message, mentioning the member
+  Jimp.read("template.png", function (err, image) {
+    if (err) throw err;
+    Jimp.loadFont("avenir.fnt").then(function (font) {
+      image.print(font, 45, 275, member);
+      image.write("welcome.png");
+    });
+  });
+  setTimeout(function () {
+    var resWelcome = new Discord.Attachment("welcome.png");
+    message.reply(resWelcome);
+  }, 2000);
   channel.send(`Welcome to edisonlee55 Discord Server, ${member}!\nPlease read <#412453219264888832> carefully and having fun!`);
 });
 client.login(process.env.TOKEN);
