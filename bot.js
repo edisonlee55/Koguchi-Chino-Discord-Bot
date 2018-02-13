@@ -69,21 +69,21 @@ client.on('message', message => {
 });
 client.on('guildMemberAdd', member => {
   // Send the message to a designated channel on a server:
-  const channel = member.guild.channels.find('general');
+  const channel = member.guild.channels.find('name', 'general');
   // Do nothing if the channel wasn't found on this server
   if (!channel) return;
   // Send the message, mentioning the member
   Jimp.read("template.png", function (err, image) {
     if (err) throw err;
     Jimp.loadFont("avenir.fnt").then(function (font) {
-      image.print(font, 45, 275, member);
+      image.print(font, 40, 275, member.user.username);
       image.write("welcome.png");
     });
   });
   setTimeout(function () {
     var resWelcome = new Discord.Attachment("welcome.png");
-    message.reply(resWelcome);
-  }, 2000);
+    channel.send(resWelcome);
+  }, 3000);
   channel.send(`Welcome to edisonlee55 Discord Server, ${member}!\nPlease read <#412453219264888832> carefully and having fun!`);
 });
 client.login(process.env.TOKEN);
