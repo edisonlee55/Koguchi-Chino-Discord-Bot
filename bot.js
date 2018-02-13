@@ -82,9 +82,13 @@ client.on('guildMemberAdd', member => {
   });
   setTimeout(function () {
     var resWelcome = new Discord.Attachment("welcome.png");
-    channel.send(resWelcome);
+    channel.send({
+      embed: {
+        description: `Welcome to edisonlee55 Discord Server, ${member}!\nPlease read <#412453219264888832> carefully and having fun!`,
+        file: resWelcome,
+      }
+    });
   }, 3000);
-  channel.send(`Welcome to edisonlee55 Discord Server, ${member}!\nPlease read <#412453219264888832> carefully and having fun!`);
 });
 client.login(process.env.TOKEN);
 
