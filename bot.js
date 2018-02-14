@@ -4,11 +4,12 @@
  * This source code is licensed under the MIT license found in the
  * LICENSE file in the root directory of this source tree.
  */
+const rimraf = require('rimraf');
 const express = require('express');
 const Discord = require('discord.js');
 const cheerio = require('cheerio');
 const request = require('request');
-var Jimp = require("jimp");
+const Jimp = require("jimp");
 var glitchButton = "<html><head><title>Koguchi Chino Discord Bot</title></head><body><h1>Koguchi Chino Discord Bot</h1><script src=\"https://button.glitch.me/button.js\" data-style=\"glitch\"></script><div class=\"glitchButton\" style=\"position:fixed;top:20px;right:20px;\"></div></body></html>";
 let app = express();
 app.get('/', function (req, res) {
@@ -70,6 +71,7 @@ client.on('message', message => {
 client.on('guildMemberAdd', member => {
   // Send the message to a designated channel on a server:
   const channel = member.guild.channels.find('name', 'general');
+  var userId = member.user.id;
   // Do nothing if the channel wasn't found on this server
   if (!channel) return;
   // Send the message, mentioning the member
@@ -77,11 +79,11 @@ client.on('guildMemberAdd', member => {
     if (err) throw err;
     Jimp.loadFont("avenir.fnt").then(function (font) {
       image.print(font, 40, 275, member.user.username);
-      image.write("welcome.png");
+      image.write("welcome/welcome_" + userId + ".png");
     });
   });
   setTimeout(function () {
-    var resWelcome = new Discord.Attachment("welcome.png");
+    var resWelcome = new Discord.Attachment("welcome_" + userId + ".png");
     channel.send({
       embed: {
         description: `Welcome to edisonlee55 Discord Server, ${member}!\nPlease read <#412453219264888832> carefully and having fun!`,
@@ -91,6 +93,10 @@ client.on('guildMemberAdd', member => {
   }, 3000);
 });
 client.login(process.env.TOKEN);
+
+setInterval(function () {
+  rimraf('welcome', function () { });
+}, 30000);
 
 function getPixivImgLink(url, message, callback) {
   console.log("Pixiv Img List Link: " + url);
