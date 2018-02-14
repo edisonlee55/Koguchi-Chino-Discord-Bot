@@ -79,10 +79,35 @@ client.on('message', message => {
 
           if (typeof evaled !== "string")
             evaled = require("util").inspect(evaled);
-
-          message.channel.send(clean(evaled), { code: "xl" });
+          message.channel.send({
+            embed: {
+              color: 53380,
+              author: {
+                name: "Evaluated with success",
+                icon_url: message.author.avatarURL
+              },
+              title: "Return:",
+              description: "```" + clean(evaled) + "```",
+              footer: {
+                text: "Asked by: " + message.author.username + " (" + message.author.id + ")"
+              }
+            }
+          });
         } catch (err) {
-          message.channel.send(`\`ERROR\` \`\`\`xl\n${clean(err)}\n\`\`\``);
+          message.channel.send({
+            embed: {
+              color: 15406156,
+              author: {
+                name: "Evaluated fail",
+                icon_url: message.author.avatarURL
+              },
+              title: "Return:",
+              description: "```" + clean(err) + "```",
+              footer: {
+                text: "Asked by: " + message.author.username + " (" + message.author.id + ")"
+              }
+            }
+          });
         }
         break;
     }
