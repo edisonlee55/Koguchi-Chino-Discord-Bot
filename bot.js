@@ -10,6 +10,12 @@ const Discord = require('discord.js');
 const cheerio = require('cheerio');
 const request = require('request');
 const Jimp = require("jimp");
+const clean = text => {
+  if (typeof (text) === "string")
+    return text.replace(/`/g, "`" + String.fromCharCode(8203)).replace(/@/g, "@" + String.fromCharCode(8203));
+  else
+    return text;
+}
 var glitchButton = "<html><head><title>Koguchi Chino Discord Bot</title></head><body><h1>Koguchi Chino Discord Bot</h1><script src=\"https://button.glitch.me/button.js\" data-style=\"glitch\"></script><div class=\"glitchButton\" style=\"position:fixed;top:20px;right:20px;\"></div></body></html>";
 let app = express();
 app.get('/', function (req, res) {
