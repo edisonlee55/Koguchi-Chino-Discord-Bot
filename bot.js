@@ -65,6 +65,20 @@ client.on('message', message => {
       case 'loli':
         sendLoliPhoto(message);
         break;
+      case 'eval':
+        if (message.author.id !== process.env.OWNER_ID) return;
+        try {
+          const code = args.join(" ");
+          let evaled = eval(code);
+
+          if (typeof evaled !== "string")
+            evaled = require("util").inspect(evaled);
+
+          message.channel.send(clean(evaled), { code: "xl" });
+        } catch (err) {
+          message.channel.send(`\`ERROR\` \`\`\`xl\n${clean(err)}\n\`\`\``);
+        }
+        break;
     }
   }
 });
