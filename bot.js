@@ -79,18 +79,17 @@ client.on('guildMemberAdd', member => {
     if (err) throw err;
     Jimp.loadFont("avenir.fnt").then(function (font) {
       image.print(font, 40, 275, member.user.username);
-      image.write("welcome/welcome_" + userId + ".png");
+      image.write("welcome/welcome_" + userId + ".png", function () {
+        var resWelcome = new Discord.Attachment("welcome_" + userId + ".png");
+        channel.send({
+          embed: {
+            description: `Welcome to edisonlee55 Discord Server, ${member}!\nPlease read <#412453219264888832> carefully and having fun!`,
+            file: resWelcome,
+          }
+        });
+      });
     });
   });
-  setTimeout(function () {
-    var resWelcome = new Discord.Attachment("welcome_" + userId + ".png");
-    channel.send({
-      embed: {
-        description: `Welcome to edisonlee55 Discord Server, ${member}!\nPlease read <#412453219264888832> carefully and having fun!`,
-        file: resWelcome,
-      }
-    });
-  }, 3000);
 });
 client.login(process.env.TOKEN);
 
