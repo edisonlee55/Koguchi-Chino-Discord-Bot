@@ -80,7 +80,7 @@ client.on('guildMemberAdd', member => {
     Jimp.loadFont("avenir.fnt").then(function (font) {
       image.print(font, 40, 275, member.user.username);
       image.write("welcome/welcome_" + userId + ".png", function () {
-        var resWelcome = new Discord.Attachment("welcome_" + userId + ".png");
+        var resWelcome = new Discord.Attachment("welcome/welcome_" + userId + ".png");
         channel.send({
           embed: {
             description: `Welcome to edisonlee55 Discord Server, ${member}!\nPlease read <#412453219264888832> carefully and having fun!`,
