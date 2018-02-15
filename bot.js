@@ -5,6 +5,7 @@
  * LICENSE file in the root directory of this source tree.
  */
 const rimraf = require('rimraf');
+const { execSync } = require('child_process');
 const express = require('express');
 const Discord = require('discord.js');
 const cheerio = require('cheerio');
