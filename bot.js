@@ -10,7 +10,7 @@ const Discord = require('discord.js');
 const cheerio = require('cheerio');
 const request = require('request');
 const Jimp = require("jimp");
-const clean = text => {
+const cleanString = text => {
   if (typeof (text) === "string")
     return text.replace(/`/g, "`" + String.fromCharCode(8203)).replace(/@/g, "@" + String.fromCharCode(8203));
   else
@@ -86,7 +86,7 @@ client.on('message', message => {
                 icon_url: message.author.avatarURL
               },
               title: "Return:",
-              description: "```" + clean(evaled) + "```",
+              description: "```" + cleanString(evaled) + "```",
               footer: {
                 text: "Asked by: " + message.author.username + " (" + message.author.id + ")"
               }
@@ -101,7 +101,7 @@ client.on('message', message => {
                 icon_url: message.author.avatarURL
               },
               title: "Return:",
-              description: "```" + clean(err) + "```",
+              description: "```" + cleanString(err) + "```",
               footer: {
                 text: "Asked by: " + message.author.username + " (" + message.author.id + ")"
               }
