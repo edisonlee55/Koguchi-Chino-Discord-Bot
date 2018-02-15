@@ -103,7 +103,7 @@ client.on('message', message => {
               title: "Return:",
               description: "```" + clean(err) + "```",
               footer: {
-                text: "Asked by: " + message.author.username + " (" + message.author.id + ")"
+                text: "Asked by: <@" + message.author.id + "> (" + message.author.id + ")"
               }
             }
           });
