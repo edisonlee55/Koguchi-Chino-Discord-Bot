@@ -4,11 +4,11 @@
  * This source code is licensed under the MIT license found in the
  * LICENSE file in the root directory of this source tree.
  */
-const rimraf = require('rimraf');
-const express = require('express');
-const Discord = require('discord.js');
-const cheerio = require('cheerio');
-const request = require('request');
+const rimraf = require("rimraf");
+const express = require("express");
+const Discord = require("discord.js");
+const cheerio = require("cheerio");
+const request = require("request");
 const Jimp = require("jimp");
 const cleanString = text => {
   if (typeof (text) === "string")
@@ -18,8 +18,8 @@ const cleanString = text => {
 }
 var glitchButton = "<html><head><title>Koguchi Chino Discord Bot</title></head><body><h1>Koguchi Chino Discord Bot</h1><script src=\"https://button.glitch.me/button.js\" data-style=\"glitch\"></script><div class=\"glitchButton\" style=\"position:fixed;top:20px;right:20px;\"></div></body></html>";
 let app = express();
-app.get('/', function (req, res) {
-  res.writeHead(200, { 'Content-Type': 'text/html' });
+app.get("/", function (req, res) {
+  res.writeHead(200, { "Content-Type": "text/html" });
   res.write(glitchButton);
   res.end();
 });
@@ -28,22 +28,110 @@ var server = app.listen(process.env.PORT || 3000, function () {
   console.log("Copyright (c) 2018 MING-CHIEN LEE. All rights reserved.\n");
   console.log("Listening express on port %s", server.address().port);
 });
+function getPixivImgLink(url, message, callback) {
+  console.log("Pixiv Img List Link: " + url);
+  var illustIdList = [];
+  var option = {
+    url: url,
+    headers: {
+      "Cookie": process.env.PIXIV_COOKIE,
+    }
+  };
+  request(option, function (err, res, body) {
+    if (!err && res.statusCode == 200) {
+      var $ = cheerio.load(body);
+      $("#js-mount-point-search-result-list").each(function (index, element) {
+        var data = element.attribs["data-items"];
+        data = JSON.parse(data);
+        for (var i = 0; i < data.length; i++) {
+          illustIdList.push(data[i].illustId);
+        }
+      });
+      callback(illustIdList);
+    } else {
+      console.error("getPixivImgLink " + err);
+      callback("error");
+    }
+  });
+}
+function sendChinoPhoto(message) {
+  getPixivImgLink("https://www.pixiv.net/search.php?word=%E6%99%BA%E4%B9%83&order=date_d&p=" + Math.round(1 + Math.random() * 150), message, function (illustIdList) {
+    if (illustIdList !== "error") {
+      console.log(illustIdList);
+      var illustId = illustIdList[Math.round(Math.random() * illustIdList.length - 1)];
+      var imgurl = "https://pixiv.cat/" + illustId + ".png";
+      console.log("Chino Pixiv Img Link: " + imgurl);
+      function check() {
+        request(imgurl, function (err, res, body) {
+          if (!err && res.statusCode == 200) {
+            var resImg = new Discord.Attachment(imgurl);
+            message.channel.send({
+              embed: {
+                file: resImg,
+                footer: {
+                  text: "Pixiv illust_id: " + illustId
+                }
+              }
+            });
+          } else {
+            illustId = illustIdList[Math.round(Math.random() * illustIdList.length - 1)];
+            imgurl = "https://pixiv.cat/" + illustId + ".png";
+            console.log("Chino Pixiv Img Link: " + imgurl);
+            check();
+          }
+        });
+      }
+      check();
+    }
+  });
+}
+function sendLoliPhoto(message) {
+  getPixivImgLink("https://www.pixiv.net/search.php?word=%E3%83%AD%E3%83%AA%20OR%20(%20loli%20)&order=date_d&p=" + Math.round(1 + Math.random() * 1000), message, function (illustIdList) {
+    if (illustIdList !== "error") {
+      console.log(illustIdList);
+      var illustId = illustIdList[Math.round(Math.random() * illustIdList.length - 1)];
+      var imgurl = "https://pixiv.cat/" + illustId + ".png";
+      console.log("Loli Pixiv Img Link: " + imgurl);
+      function check() {
+        request(imgurl, function (err, res, body) {
+          if (!err && res.statusCode == 200) {
+            var resImg = new Discord.Attachment(imgurl);
+            message.channel.send({
+              embed: {
+                file: resImg,
+                footer: {
+                  text: "Pixiv illust_id: " + illustId
+                }
+              }
+            });
+          } else {
+            illustId = illustIdList[Math.round(Math.random() * illustIdList.length - 1)];
+            imgurl = "https://pixiv.cat/" + illustId + ".png";
+            console.log("Loli Pixiv Img Link: " + imgurl);
+            check();
+          }
+        });
+      }
+      check();
+    }
+  });
+}
 // Initialize Discord Bot
 const client = new Discord.Client();
-client.on('ready', () => {
+client.on("ready", () => {
   console.log(`Logged in as ${client.user.tag}!`);
-  client.user.setActivity('@kc.loli | !help');
+  client.user.setActivity("@kc.loli | !help");
 });
-client.on('message', message => {
+client.on("message", message => {
   // Our bot needs to know if it will execute a command
   // It will listen for messages that will start with `!`
-  if (message.content.substring(0, 1) == '!') {
-    var args = message.content.substring(1).split(' ');
+  if (message.content.substring(0, 1) == "!") {
+    var args = message.content.substring(1).split(" ");
     var cmd = args[0];
 
     args = args.splice(1);
     switch (cmd) {
-      case 'help':
+      case "help":
         message.channel.send({
           embed: {
             color: 3447003,
@@ -65,13 +153,13 @@ client.on('message', message => {
           }
         });
         break;
-      case 'chino':
+      case "chino":
         sendChinoPhoto(message);
         break;
-      case 'loli':
+      case "loli":
         sendLoliPhoto(message);
         break;
-      case 'eval':
+      case "eval":
         if (message.author.id !== process.env.OWNER_ID) return;
         try {
           const code = args.join(" ");
@@ -112,9 +200,9 @@ client.on('message', message => {
     }
   }
 });
-client.on('guildMemberAdd', member => {
+client.on("guildMemberAdd", member => {
   // Send the message to a designated channel on a server:
-  const channel = member.guild.channels.find('name', 'general');
+  const channel = member.guild.channels.find("name", "general");
   var userId = member.user.id;
   // Do nothing if the channel wasn't found on this server
   if (!channel) return;
@@ -138,96 +226,5 @@ client.on('guildMemberAdd', member => {
 client.login(process.env.TOKEN);
 
 setInterval(function () {
-  rimraf('welcome', function () { });
+  rimraf("welcome", function () { });
 }, 30000);
-
-function getPixivImgLink(url, message, callback) {
-  console.log("Pixiv Img List Link: " + url);
-  var illustIdList = [];
-  var option = {
-    url: url,
-    headers: {
-      'Cookie': process.env.PIXIV_COOKIE,
-    }
-  };
-  request(option, function (err, res, body) {
-    if (!err && res.statusCode == 200) {
-      var $ = cheerio.load(body);
-      $("#js-mount-point-search-result-list").each(function (index, element) {
-        var data = element.attribs['data-items'];
-        data = JSON.parse(data);
-        for (var i = 0; i < data.length; i++) {
-          illustIdList.push(data[i].illustId);
-        }
-      });
-      callback(illustIdList);
-    } else {
-      console.error("getPixivImgLink " + err);
-      callback("error");
-    }
-  });
-}
-
-function sendChinoPhoto(message) {
-  getPixivImgLink('https://www.pixiv.net/search.php?word=%E6%99%BA%E4%B9%83&order=date_d&p=' + Math.round(1 + Math.random() * 150), message, function (illustIdList) {
-    if (illustIdList !== "error") {
-      console.log(illustIdList);
-      var illustId = illustIdList[Math.round(Math.random() * illustIdList.length - 1)];
-      var imgurl = "https://pixiv.cat/" + illustId + ".png";
-      console.log("Chino Pixiv Img Link: " + imgurl);
-      function check() {
-        request(imgurl, function (err, res, body) {
-          if (!err && res.statusCode == 200) {
-            var resImg = new Discord.Attachment(imgurl);
-            message.channel.send({
-              embed: {
-                file: resImg,
-                footer: {
-                  text: "Pixiv illust_id: " + illustId
-                }
-              }
-            });
-          } else {
-            illustId = illustIdList[Math.round(Math.random() * illustIdList.length - 1)];
-            imgurl = "https://pixiv.cat/" + illustId + ".png";
-            console.log("Chino Pixiv Img Link: " + imgurl);
-            check();
-          }
-        });
-      }
-      check();
-    }
-  });
-}
-
-function sendLoliPhoto(message) {
-  getPixivImgLink('https://www.pixiv.net/search.php?word=%E3%83%AD%E3%83%AA%20OR%20(%20loli%20)&order=date_d&p=' + Math.round(1 + Math.random() * 1000), message, function (illustIdList) {
-    if (illustIdList !== "error") {
-      console.log(illustIdList);
-      var illustId = illustIdList[Math.round(Math.random() * illustIdList.length - 1)];
-      var imgurl = "https://pixiv.cat/" + illustId + ".png";
-      console.log("Loli Pixiv Img Link: " + imgurl);
-      function check() {
-        request(imgurl, function (err, res, body) {
-          if (!err && res.statusCode == 200) {
-            var resImg = new Discord.Attachment(imgurl);
-            message.channel.send({
-              embed: {
-                file: resImg,
-                footer: {
-                  text: "Pixiv illust_id: " + illustId
-                }
-              }
-            });
-          } else {
-            illustId = illustIdList[Math.round(Math.random() * illustIdList.length - 1)];
-            imgurl = "https://pixiv.cat/" + illustId + ".png";
-            console.log("Loli Pixiv Img Link: " + imgurl);
-            check();
-          }
-        });
-      }
-      check();
-    }
-  });
-}
