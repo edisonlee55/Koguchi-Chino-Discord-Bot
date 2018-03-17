@@ -11,10 +11,11 @@ const cheerio = require("cheerio");
 const request = require("request");
 const Jimp = require("jimp");
 const cleanString = text => {
-  if (typeof (text) === "string")
+  if (typeof (text) === "string") {
     return text.replace(/`/g, "`" + String.fromCharCode(8203)).replace(/@/g, "@" + String.fromCharCode(8203));
-  else
+  } else {
     return text;
+  }
 }
 var glitchButton = "<html><head><title>Koguchi Chino Discord Bot</title></head><body><h1>Koguchi Chino Discord Bot</h1><script src=\"https://button.glitch.me/button.js\" data-style=\"glitch\"></script><div class=\"glitchButton\" style=\"position:fixed;top:20px;right:20px;\"></div></body></html>";
 let app = express();
@@ -160,12 +161,15 @@ client.on("message", message => {
         sendLoliPhoto(message);
         break;
       case "eval":
-        if (message.author.id !== process.env.OWNER_ID) return;
+        if (message.author.id !== process.env.OWNER_ID) {
+          return;
+        }
         try {
           const code = args.join(" ");
           let evaled = eval(code);
-          if (typeof evaled !== "string")
+          if (typeof evaled !== "string") {
             evaled = require("util").inspect(evaled);
+          }
           message.channel.send({
             embed: {
               color: 53380,
@@ -205,10 +209,14 @@ client.on("guildMemberAdd", member => {
   const channel = member.guild.channels.find("name", "general");
   var userId = member.user.id;
   // Do nothing if the channel wasn't found on this server
-  if (!channel) return;
+  if (!channel) {
+    return;
+  }
   // Send the message, mentioning the member
   Jimp.read("template.png", function (err, image) {
-    if (err) throw err;
+    if (err) {
+      throw err;
+    }
     Jimp.loadFont("avenir.fnt").then(function (font) {
       image.print(font, 40, 275, member.user.username);
       image.write("welcome/welcome_" + userId + ".png", function () {
